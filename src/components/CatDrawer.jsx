@@ -21,7 +21,7 @@ export const CatDrawer = ({ breed, onClose }) => (
           <Stack spacing={3}>
             <Text fontSize="sm">{breed.description}</Text>
 
-            <Cats columns={1} breedId={breed.id} />
+            <Cats columns={1} showCatBehaviour="inSitu" breedId={breed.id} />
           </Stack>
         )}
       </DrawerBody>
