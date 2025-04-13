@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
-import { Cats } from "./views/Cats";
-import { Breeds } from "./views/Breeds";
-import { Favourites } from "./views/Favourites";
+import { Cats } from "../views/Cats";
+import { Breeds } from "../views/Breeds";
+import { Favourites } from "../views/Favourites";
 
 const router = createBrowserRouter([
   {
