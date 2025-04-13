@@ -1,6 +1,6 @@
-const performCatApiRequest = (path, options) => {
+const performCatApiRequest = (endpoint, options) => {
   const catApiBaseUrl = "https://api.thecatapi.com/v1";
-  const url = `${catApiBaseUrl}/${path}`;
+  const url = `${catApiBaseUrl}/${endpoint}`;
   const headers = {
     "Content-Type": "application/json",
     "x-api-key": import.meta.env.VITE_CAT_API_KEY,
@@ -16,12 +16,20 @@ const performCatApiRequest = (path, options) => {
   return fetch(url, requestOptions).then((res) => res.json());
 };
 
-export const getCats = (page = 0, limit = 10) => {
-  const path = `images/search?limit=${limit}&page=${page}`;
+// The way that the nextPage is calculated is not correct because the number of the items in the
+// last page might actually be equal to limit!. In reality though if a next page exists is usually
+// determined by data provided by the API. In this case this info is not provided. The reason that we
+// need to determine if a next page exists is to disable the "load more" button. If this is not done
+// then when the last page is reached the button will still be enabled and pressing it will not
+// return an empty array as expected but the last actual fetched page! This happens because of the
+// caching that React Query does. If in real life an API would not provide this info then there are ways
+// around it but they would be "suboptimal". In the context of this exercise it's ok to have this edge case bug
+export const getCats = ({ page = 0, limit = 10, breedId = "" }) => {
+  const endpoint = `images/search?limit=${limit}&page=${page}&breed_ids=${breedId}`;
 
-  return performCatApiRequest(path).then((data) => ({
+  return performCatApiRequest(endpoint).then((data) => ({
     data,
-    nextPage: page + 1,
+    nextPage: data.length === limit ? page + 1 : null,
   }));
 };
 

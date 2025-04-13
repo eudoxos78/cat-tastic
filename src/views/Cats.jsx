@@ -16,13 +16,20 @@ export const Cats = ({ columns, header, breedId }) => {
 
   const toast = useToast();
 
-  const { data, error, fetchNextPage, isPending, isError, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["cats"],
-      queryFn: ({ pageParam }) => getCats(pageParam),
-      initialPageParam: 0,
-      getNextPageParam: (lastPage) => lastPage.nextPage,
-    });
+  const {
+    data,
+    error,
+    hasNextPage,
+    fetchNextPage,
+    isPending,
+    isError,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["cats", breedId],
+    queryFn: ({ pageParam }) => getCats({ page: pageParam, breedId }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+  });
 
   const { mutate: markFavourite } = useMutation({
     mutationFn: postFavouriteCat,
@@ -102,6 +109,7 @@ export const Cats = ({ columns, header, breedId }) => {
           colorScheme="orange"
           size="md"
           isLoading={isFetchingNextPage}
+          isDisabled={!hasNextPage}
           onClick={fetchNextPage}
         >
           Load more
