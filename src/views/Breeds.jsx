@@ -8,16 +8,10 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { getBreeds } from "../api";
-import { Cats } from "./Cats";
+import { CatDrawer } from "../components/CatDrawer";
 
 export const Breeds = () => {
   const [selectedBreed, setSelectedBreed] = useState(null);
@@ -45,22 +39,7 @@ export const Breeds = () => {
 
   return (
     <>
-      <Drawer isOpen={Boolean(selectedBreed)} onClose={onClose} size="sm">
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{selectedBreed?.name}</DrawerHeader>
-          <DrawerBody>
-            {selectedBreed && (
-              <Stack spacing={3}>
-                <Text fontSize="sm">{selectedBreed.description}</Text>
-
-                <Cats columns={1} breedId={selectedBreed.id} />
-              </Stack>
-            )}
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+      <CatDrawer breed={selectedBreed} onClose={onClose} />
 
       <Stack m={10} alignItems="center" gap={10}>
         <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={10}>
