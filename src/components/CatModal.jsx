@@ -8,6 +8,12 @@ import {
 } from "@chakra-ui/react";
 import { Kitten } from "./Kitten";
 
+const getTitle = () => {
+  const titles = ["Hola!", "Ta-dah!", "Surprise!", "Meow!", "Purrr!"];
+
+  return titles[Math.floor(Math.random() * titles.length)];
+};
+
 export const CatModal = ({ cat, actions, onClose }) => (
   <Modal
     isOpen={Boolean(cat)}
@@ -17,7 +23,7 @@ export const CatModal = ({ cat, actions, onClose }) => (
   >
     <ModalOverlay />
     <ModalContent>
-      <ModalHeader>Hola!</ModalHeader>
+      <ModalHeader>{getTitle()}</ModalHeader>
       <ModalCloseButton />
       <ModalBody>{cat && <Kitten cat={cat} actions={actions} />}</ModalBody>
     </ModalContent>

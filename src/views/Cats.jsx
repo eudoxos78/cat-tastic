@@ -3,9 +3,11 @@ import {
   Box,
   Button,
   Collapse,
+  Heading,
   Image,
   SimpleGrid,
   SlideFade,
+  Spinner,
   Stack,
   useToast,
 } from "@chakra-ui/react";
@@ -17,6 +19,7 @@ import { Kitten } from "../components/Kitten";
 export const Cats = ({
   columns,
   header,
+  loadingText,
   showCatBehaviour = "modal",
   breedId,
 }) => {
@@ -39,7 +42,7 @@ export const Cats = ({
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });
 
-  const { mutate: markFavourite } = useMutation({
+  const { mutate: markFavourite, isPending: isMarkPending } = useMutation({
     mutationFn: postFavouriteCat,
     onSuccess: () => {
       toast({
@@ -56,7 +59,10 @@ export const Cats = ({
 
   const actions = [
     <Button
+      key="add-to-favorites"
       colorScheme="green"
+      order={3}
+      isLoading={isMarkPending}
       onClick={() => {
         markFavourite(selectedCat?.id);
       }}
@@ -68,7 +74,7 @@ export const Cats = ({
   if (isPending) {
     return (
       <Box mt={10} fontSize="2xl" fontStyle="italic" textAlign="center">
-        "They are coming..."
+        {loadingText || <Spinner />}
       </Box>
     );
   }
@@ -93,7 +99,7 @@ export const Cats = ({
             <Kitten
               cat={selectedCat}
               actions={[
-                <Button mr="auto" onClick={onClose}>
+                <Button key="cancel" mr="auto" order={1} onClick={onClose}>
                   Cancel
                 </Button>,
                 ...actions,
@@ -115,9 +121,9 @@ export const Cats = ({
       >
         <Stack m={10} alignItems="center" gap={10}>
           {header && (
-            <Box fontSize="3xl" fontWeight="bold" textAlign="center">
+            <Heading as="h1" size="lg">
               {header}
-            </Box>
+            </Heading>
           )}
 
           <SimpleGrid
@@ -144,7 +150,7 @@ export const Cats = ({
           </SimpleGrid>
 
           <Button
-            colorScheme="orange"
+            colorScheme="blue"
             size="md"
             isLoading={isFetchingNextPage}
             isDisabled={!hasNextPage}

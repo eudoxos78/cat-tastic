@@ -42,6 +42,10 @@ export const Breeds = () => {
       <CatDrawer breed={selectedBreed} onClose={onClose} />
 
       <Stack m={10} alignItems="center" gap={10}>
+        <Heading as="h1" size="lg">
+          From around the world!
+        </Heading>
+
         <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={10}>
           {data.map((breed) => (
             <Card

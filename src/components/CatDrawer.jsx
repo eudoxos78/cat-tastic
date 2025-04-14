@@ -11,7 +11,7 @@ import {
 import { Cats } from "../views/Cats";
 
 export const CatDrawer = ({ breed, onClose }) => (
-  <Drawer isOpen={Boolean(breed)} onClose={onClose} size="sm">
+  <Drawer isOpen={Boolean(breed)} onClose={onClose} size="md">
     <DrawerOverlay />
     <DrawerContent>
       <DrawerCloseButton />

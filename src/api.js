@@ -1,6 +1,5 @@
 const performCatApiRequest = (endpoint, options) => {
-  const catApiBaseUrl = "https://api.thecatapi.com/v1";
-  const url = `${catApiBaseUrl}/${endpoint}`;
+  const url = `${import.meta.env.VITE_CAT_API_BASE_URL}/${endpoint}`;
   const headers = {
     "Content-Type": "application/json",
     "x-api-key": import.meta.env.VITE_CAT_API_KEY,
@@ -25,13 +24,15 @@ const performCatApiRequest = (endpoint, options) => {
 // caching that React Query does. If in real life an API would not provide this info then there are ways
 // around it but they would be "suboptimal". In the context of this exercise it's ok to have this edge case bug
 export const getCats = ({ page = 0, limit = 10, breedId = "" }) => {
-  const endpoint = `images/search?limit=${limit}&page=${page}&breed_ids=${breedId}`;
+  const endpoint = `images/search?limit=${limit}&page=${page}&include_breeds=0&include_categories=0&breed_ids=${breedId}`;
 
   return performCatApiRequest(endpoint).then((data) => ({
     data,
     nextPage: data.length === limit ? page + 1 : null,
   }));
 };
+
+export const getCat = (catId) => performCatApiRequest(`images/${catId}`);
 
 export const getBreeds = () => performCatApiRequest("breeds");
 

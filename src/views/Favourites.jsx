@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   Box,
   Button,
+  Heading,
   Image,
   SimpleGrid,
   Stack,
@@ -23,7 +24,7 @@ export const Favourites = () => {
     queryFn: getFavourites,
   });
 
-  const { mutate: unmarkFavourite } = useMutation({
+  const { mutate: unmarkFavourite, isPending: isUnmarkPending } = useMutation({
     mutationFn: deleteFavouriteCat,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["favourites"] });
@@ -39,6 +40,20 @@ export const Favourites = () => {
   const onClose = () => {
     setSelectedFavourite(null);
   };
+
+  const actions = [
+    <Button
+      key="delete-favorite"
+      colorScheme="red"
+      order={3}
+      isLoading={isUnmarkPending}
+      onClick={() => {
+        unmarkFavourite(selectedFavourite?.id);
+      }}
+    >
+      Delete favorite
+    </Button>,
+  ];
 
   if (isPending) {
     return (
@@ -56,23 +71,14 @@ export const Favourites = () => {
     <>
       <CatModal
         cat={selectedFavourite?.image}
-        actions={[
-          <Button
-            colorScheme="red"
-            onClick={() => {
-              unmarkFavourite(selectedFavourite?.id);
-            }}
-          >
-            Delete favorite
-          </Button>,
-        ]}
+        actions={actions}
         onClose={onClose}
       />
 
       <Stack m={10} alignItems="center" gap={10}>
-        <Box fontSize="3xl" fontWeight="bold" textAlign="center">
-          Who’s the fairest of them all?
-        </Box>
+        <Heading as="h1" size="lg">
+          Who's the fairest of them all?
+        </Heading>
 
         <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={10}>
           {data.map((favourite) => (
